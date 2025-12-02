@@ -1,0 +1,1 @@
+export const ROUTE_REL = 'ROUTE|ROUTES|Routes'; // match all existing variants
