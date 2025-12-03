@@ -25,7 +25,7 @@ export default function Airports() {
     setTotal(res.total);
   };
 
-  useEffect(() => { load(); }, []); // initial
+  useEffect(() => { load(); }, []); 
 
   return (
     <>

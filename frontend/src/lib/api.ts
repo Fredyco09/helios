@@ -24,14 +24,22 @@ export async function getActiveUSAirlines() {
   return r.json();
 }
 
-export async function getShortestTrip(srcIata: string, dstIata: string, maxHops=8) {
-  const r = await fetch(`${BASE}/api/trips/shortest?srcIata=${srcIata}&dstIata=${dstIata}&maxHops=${maxHops}`);
-  if (!r.ok) throw new Error(await r.text());
+export async function getShortestTrip(src: string, dst: string, maxHops: number) {
+  const q = new URLSearchParams({ srcIata: src, dstIata: dst, maxHops: String(maxHops) });
+  const r = await fetch(`${BASE}/api/trips/shortest?` + q.toString());
   return r.json();
 }
 
-export async function getConstrainedTrip(srcIata: string, dstIata: string, zStops=1, maxHops=8) {
-  const r = await fetch(`${BASE}/api/trips/constrained?srcIata=${srcIata}&dstIata=${dstIata}&zStops=${zStops}&maxHops=${maxHops}`);
-  if (!r.ok) throw new Error(await r.text());
+export async function getConstrainedTrip(src: string, dst: string, zStops: number, maxHops: number) {
+  const q = new URLSearchParams({
+    srcIata: src, dstIata: dst, zStops: String(zStops), maxHops: String(maxHops)
+  });
+  const r = await fetch(`${BASE}/api/trips/constrained?` + q.toString());
   return r.json();
+}
+
+export async function getBoundedReachability(origin: string, d: number) {
+  const q = new URLSearchParams({ srcIata: origin, maxHops: String(d) });
+  const r = await fetch(`${BASE}/api/trips/bounded?` + q.toString());
+  return r.json(); // expected { cities: string[] }
 }

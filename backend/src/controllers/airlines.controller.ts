@@ -22,15 +22,23 @@ export async function getAirlinesWithStops(stops: number) {
 }
 
 
+
 export async function getCodeShareAirlines() {
-  return run(
-    `MATCH ()-[r:ROUTE {codeshare:true}]->()
-     WITH DISTINCT r.airlineId AS aid
-     MATCH (al:Airline {airlineId:aid})
-     RETURN al.name AS name, al.iata AS iata, al.icao AS icao
-     ORDER BY name`
-  );
+  const cypher = `
+    MATCH ()-[r:ROUTE|ROUTES|Routes]->()
+    WHERE toLower(trim(toString(r.codeshare))) IN ['y','true','1','yes']
+    WITH DISTINCT toInteger(r.airlineId) AS aid
+    OPTIONAL MATCH (al:Airline)
+      WHERE toInteger(COALESCE(al.airlineId, al.airlineid, al.AirlineID)) = aid
+    RETURN coalesce(al.name,'(unknown)') AS name,
+           al.iata AS iata,
+           al.icao AS icao,
+           aid     AS airlineId
+    ORDER BY name
+  `;
+  return run(cypher);
 }
+
 
 export async function getActiveAirlinesInUS() {
   return run(

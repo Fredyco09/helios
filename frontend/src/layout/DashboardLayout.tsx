@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       <AppBar position="fixed" sx={{ zIndex: 1201 }}>
         <Toolbar sx={{ gap: 1 }}>
           <img
-            src="/logo2.png"              // or /logo.png
+            src="/logo2.png"          
             alt="Helios"
             style={{ width: 75, height: 75, display: 'block' }} />
           <Typography variant="h4" component="div" sx={{ fontFamily: 'Roboto', flexGrow: 1 }}>
